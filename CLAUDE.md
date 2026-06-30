@@ -26,6 +26,17 @@ instead so there's a single source of truth.
   — browses and purchases products on Amazon.com via the Chrome DevTools MCP server.
   Requires explicit user approval before placing any order; never enters payment
   credentials or selects shipping addresses on the user's behalf.
+- **`stock-trader`** ([.claude/skills/stock-trader/SKILL.md](.claude/skills/stock-trader/SKILL.md))
+  — sets up/runs a fully autonomous stock-trading loop (screens stocks, runs
+  multi-model analysis, executes trades on **Alpaca paper trading only**, notifies via
+  SMS through Twilio) on a cron schedule, no human in the loop per trade. Treat any change
+  toward real-money trading as a major decision requiring explicit user sign-off, not
+  just a config flag.
+- **`vedic-astrologer`** ([.claude/skills/vedic-astrologer/SKILL.md](.claude/skills/vedic-astrologer/SKILL.md))
+  — channels a Vedic astrology persona ("Citlali") to read birth charts via a live
+  sidereal chart calculator (browser automation, not hand-calculated positions) and
+  produce a styled HTML/PDF reading. Never predicts death/illness or makes absolute
+  declarations.
 
 Keep this list in sync when skills are added, removed, or renamed.
 

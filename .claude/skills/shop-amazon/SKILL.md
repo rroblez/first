@@ -25,10 +25,10 @@ Search, browse, and purchase products on Amazon.com using the Chrome DevTools MC
 ## Tools
 - **Chrome DevTools MCP** (`mcp__chrome-devtools__*`): All browser interaction
   - `new_page` / `list_pages`: Open/manage browser tabs
-  - `navigate`: Go to a URL
-  - `screenshot`: See current page state
-  - `click` / `type` / `execute_javascript`: Interact with page elements
-  - `get_page_content`: Read page text/structure
+  - `navigate_page`: Go to a URL
+  - `take_screenshot`: See current page state, or a single product image when given an element `uid`
+  - `take_snapshot`: Get the a11y tree (titles, prices, ratings, element `uid`s for clicking/screenshotting)
+  - `click` / `type_text`: Interact with page elements
 
 ## Process
 
@@ -71,8 +71,15 @@ Navigate to search or use the search bar:
 mcp__chrome-devtools__navigate → url: "https://www.amazon.com/s?k=<search+terms>"
 ```
 
-Take a screenshot to see results. Present the top options to the user with:
+Take a snapshot to see results. For each top candidate (typically 3-5), extract the
+ASIN from its product link and present a shortened canonical link in the form
+`https://www.amazon.com/dp/<ASIN>` — strip tracking/query params, and never substitute
+a third-party URL shortener. Don't screenshot every candidate at this stage; text +
+links are enough to compare and are much faster than per-product screenshots.
+
+Present each option with:
 - Product name
+- Shortened link
 - Price
 - Rating and review count
 - Prime eligibility
@@ -82,7 +89,12 @@ Ask the user which product they want, or if they want to refine the search.
 
 ### 4. View Product Details
 
-Click into the selected product. Take a screenshot. Confirm with the user:
+Click into the selected product. Take *one* screenshot of this product page (no `uid`
+— a full-page screenshot is more reliable than targeting a specific image element,
+which can hang on listings with embedded video/gallery widgets) and include it, along
+with the shortened `https://www.amazon.com/dp/<ASIN>` link. If the screenshot times
+out, retry once; if it times out again, skip it and proceed with text only — don't
+keep retrying. Confirm with the user:
 - Correct product
 - Correct size/color/variant
 - Price
@@ -154,6 +166,6 @@ Click "Place your order" only after explicit approval. Take a screenshot of the 
 - Amazon.com is the target site (user is in Alameda, Ca)
 - User has Prime (look for Prime delivery options)
 - The user's Chrome profile at `~/.cache/chrome-devtools-mcp/chrome-profile` may retain login sessions between uses
-- Always prefer screenshot-driven navigation — take a screenshot after every major action to verify state
+- Screenshot at decision points that need visual confirmation (product chosen, cart, checkout, order placed) — not on every step. If a screenshot call times out twice in a row, stop retrying and continue with text/snapshot data instead.
 - This workflow uses NO execution scripts — it's entirely browser-driven via MCP
 - When comparing products for the user, focus on: price per unit, review count + rating, Prime eligibility, and delivery speed
