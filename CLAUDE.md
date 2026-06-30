@@ -4,24 +4,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project purpose
 
-This repo is a sandbox for a Claude Code **skill**, `consciousness-guide`
-(defined in [.claude/skills/consciousness-guide/SKILL.md](.claude/skills/consciousness-guide/SKILL.md)),
-whose answers are grounded in the consciousness frameworks of **Robert Monroe**
-(*Journeys Out of the Body*, *Far Journeys*, *Ultimate Journey*, the Monroe Institute /
-Hemi-Sync "Focus levels") and **Thomas Campbell** (*My Big TOE* — "MBT"). Invoke it with
-`/consciousness-guide` when a user wants to explore a question through that lens —
-reflective, big-picture, or meaning-of-life style questions. Unlike a subagent, it runs
-inline in the current conversation, so follow-ups and earlier context carry over
-naturally. It presents both frameworks as exploratory, not asserted scientific or
-medical fact, and defers medical/psychiatric/crisis questions to a qualified
-professional rather than answering them itself.
+This repo is a sandbox for Claude Code **skills** (`.claude/skills/<name>/SKILL.md`).
+Each skill is invoked with `/<name>` and runs inline in the current conversation, so
+its instructions, follow-ups, and earlier context carry over naturally — unlike a
+subagent, which runs in an isolated context.
 
-`main.py` is unrelated leftover scaffolding (just prints `hi`) and isn't part of this
-project's actual purpose — don't build on it without checking with the user first.
+When asked to use, update, or create a skill, look in `.claude/skills/` first rather
+than assuming a skill's behavior — the SKILL.md frontmatter (`name`, `description`)
+is the source of truth for what it does and when to invoke it, and the body holds the
+actual instructions. Don't duplicate a skill's content into this file; reference it
+instead so there's a single source of truth.
 
-## Editing the guide's persona
+## Skills in this repo
 
-The full persona/voice instructions live in the skill file's body, not here, so
-there's a single source of truth. When updating the framing of Monroe's or Campbell's
-ideas, edit [.claude/skills/consciousness-guide/SKILL.md](.claude/skills/consciousness-guide/SKILL.md)
-directly rather than duplicating the content into this file.
+- **`consciousness-guide`** ([.claude/skills/consciousness-guide/SKILL.md](.claude/skills/consciousness-guide/SKILL.md))
+  — answers reflective, big-picture questions through Robert Monroe's out-of-body/
+  Focus-level framework and Thomas Campbell's My Big TOE (consciousness-as-fundamental,
+  entropy reduction). Presents both as exploratory lenses, not asserted fact; defers
+  medical/psychiatric/crisis questions to a professional.
+- **`shop-amazon`** ([.claude/skills/shop-amazon/SKILL.md](.claude/skills/shop-amazon/SKILL.md))
+  — browses and purchases products on Amazon.com via the Chrome DevTools MCP server.
+  Requires explicit user approval before placing any order; never enters payment
+  credentials or selects shipping addresses on the user's behalf.
+
+Keep this list in sync when skills are added, removed, or renamed.
+
+
